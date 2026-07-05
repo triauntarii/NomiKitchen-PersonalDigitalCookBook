@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  password   String
+  profilePic String?  // Foto profil opsional
+  recipes    Recipe[] // Relasi one-to-many: 1 User bisa punya banyak Resep
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  recipes     Recipe[] // Relasi one-to-many ke resep
+}
+
+model Recipe {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String?       @db.Text
+  ingredients  String        @db.Text // Bisa disimpan dalam format JSON string atau teks panjang
+  instructions String        @db.Text
+  isFavorite   Boolean       @default(false)
+  
+  // Relasi
+  userId       Int
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId   Int?
+  category     Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  photos       RecipePhoto[] // Relasi untuk mendukung beberapa foto
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model RecipePhoto {
+  id       Int    @id @default(autoincrement())
+  url      String // URL gambar yang disimpan (bisa path lokal dari multer)
+  recipeId Int
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
