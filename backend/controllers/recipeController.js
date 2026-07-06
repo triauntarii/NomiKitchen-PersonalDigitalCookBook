@@ -1,10 +1,12 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// Tambah Resep Baru (POST /recipes)
+// ============================================================
+// Function Tambah Resep Baru - (POST /recipes)
+// ============================================================
 exports.createRecipe = async (req, res) => {
     const { title, description, ingredients, instructions, categoryId } = req.body;
-    const userId = req.user.id; // Didapat dari authMiddleware
+    const userId = req.user.id;
 
     try {
         // 1. Simpan data resep
@@ -28,7 +30,7 @@ exports.createRecipe = async (req, res) => {
             await prisma.recipePhoto.createMany({ data: photosData });
         }
 
-        // Ambil kembali resep beserta fotonya untuk response
+        // 3. Ambil kembali resep beserta fotonya untuk response
         const createdRecipe = await prisma.recipe.findUnique({
             where: { id: newRecipe.id },
             include: { photos: true }
@@ -40,7 +42,9 @@ exports.createRecipe = async (req, res) => {
     }
 };
 
-// Lihat Seluruh Resep (GET /recipes)
+// ============================================================
+// Function untuk Melihat Seluruh Resep - (GET /recipes)
+// ============================================================
 exports.getAllRecipes = async (req, res) => {
     const userId = req.user.id; // Hanya ambil resep milik user yang sedang login
 
@@ -57,7 +61,9 @@ exports.getAllRecipes = async (req, res) => {
     }
 };
 
-// Lihat Detail Resep Berdasarkan ID (GET /recipes/:id)
+// ============================================================
+// Function untuk Lihat Detail Resep Berdasarkan ID - (GET /recipes/:id)
+// ============================================================
 exports.getRecipeById = async (req, res) => {
     const { id } = req.params;
     try {
@@ -73,19 +79,25 @@ exports.getRecipeById = async (req, res) => {
     }
 };
 
-// Update Informasi Resep (PUT /recipes/:id)
+// ============================================================
+// Function untuk Update Informasi Resep - (PUT /recipes/:id)
+// ============================================================
 exports.updateRecipe = async (req, res) => {
     const { id } = req.params;
     const { title, description, ingredients, instructions, categoryId } = req.body;
 
     try {
         // Cek kepemilikan resep
-        const existingRecipe = await prisma.recipe.findUnique({ where: { id: parseInt(id) } });
+        const existingRecipe = await prisma.recipe.findUnique({ 
+            where: { id: parseInt(id) }
+        });
+        
         if (!existingRecipe || existingRecipe.userId !== req.user.id) {
             return res.status(403).json({ message: "Anda tidak berhak mengubah resep ini" });
         }
 
-        const updatedRecipe = await prisma.recipe.update({
+        // Update data teks resep
+        await prisma.recipe.update({
             where: { id: parseInt(id) },
             data: {
                 title,
@@ -95,16 +107,39 @@ exports.updateRecipe = async (req, res) => {
                 categoryId: categoryId ? parseInt(categoryId) : null,
             }
         });
-        
-        // (Opsional) Jika Anda ingin menambahkan logika update foto, bisa ditambahkan di sini nantinya
 
-        res.json({ message: "Resep berhasil diperbarui", recipe: updatedRecipe });
+        // Update foto (Jika ada file baru)
+        if (req.files && req.files.length > 0) {
+            // 1. Hapus referensi foto lama dari database
+            await prisma.recipePhoto.deleteMany({
+                where: { recipeId: parseInt(id) }
+            });
+
+            // 2. Siapkan data foto baru
+            const photosData = req.files.map(file => ({
+                url: file.filename,
+                recipeId: parseInt(id)
+            }));
+
+            // 3. Simpan data foto baru ke database
+            await prisma.recipePhoto.createMany({ data: photosData });
+        }
+
+        // Ambil kembali data resep terbaru beserta fotonya untuk dikembalikan sebagai response
+        const finalRecipe = await prisma.recipe.findUnique({
+            where: { id: parseInt(id) },
+            include: { photos: true, category: true }
+        });
+
+        res.json({ message: "Resep berhasil diperbarui", recipe: finalRecipe });
     } catch (error) {
         res.status(500).json({ message: "Terjadi kesalahan server", error: error.message });
     }
 };
 
-// Hapus Resep (DELETE /recipes/:id)
+// ============================================================
+// Function untuk Menghapus Resep - (DELETE /recipes/:id)
+// ============================================================
 exports.deleteRecipe = async (req, res) => {
     const { id } = req.params;
 
@@ -121,7 +156,9 @@ exports.deleteRecipe = async (req, res) => {
     }
 };
 
-// Ubah Status Favorit (PATCH /recipes/:id/favorite)
+// ============================================================
+// Function untuk Mengubah Status Favorit - (PATCH /recipes/:id/favorite)
+// ============================================================
 exports.toggleFavorite = async (req, res) => {
     const { id } = req.params;
 
@@ -142,7 +179,9 @@ exports.toggleFavorite = async (req, res) => {
     }
 };
 
-// Cari Resep (GET /recipes/search?keyword=&category=)
+// ============================================================
+// Function untuk Mencari Resep - (GET /recipes/search?keyword=&category=)
+// ============================================================
 exports.searchRecipes = async (req, res) => {
     const { keyword, category } = req.query;
     const userId = req.user.id;

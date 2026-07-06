@@ -5,10 +5,10 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 router.use(authMiddleware);
 
-// Endpoint 3 : POST /categories ==========
+// Endpoint 5 : POST /categories ==========
 router.post('/', categoryController.createCategory);
 
-// Endpoint 4 : GET /categories ==========
+// Endpoint 6 : GET /categories ==========
 router.get('/', categoryController.getAllCategories);
 
 module.exports = router;

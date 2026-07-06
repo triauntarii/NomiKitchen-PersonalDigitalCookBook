@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 const recipeRoutes = require('./routes/recipeRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
 
 app.use('/auth', authRoutes);
+app.use('/profile', profileRoutes);
 app.use('/recipes', recipeRoutes);
 app.use('/categories', categoryRoutes);
 

@@ -1,7 +1,9 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// Tambah Kategori Baru (POST /categories)
+// ============================================================
+// Function untuk Membuat Kategori Baru - (POST /categories)
+// ============================================================
 exports.createCategory = async (req, res) => {
     const { name, description } = req.body;
 
@@ -27,7 +29,9 @@ exports.createCategory = async (req, res) => {
     }
 };
 
-// Lihat Semua Kategori (GET /categories)
+// ============================================================
+// Function untuk Melihat Semua Kategori - (GET /categories)
+// ============================================================
 exports.getAllCategories = async (req, res) => {
     try {
         const categories = await prisma.category.findMany();

@@ -4,7 +4,9 @@ const jwt = require('jsonwebtoken');
 
 const prisma = new PrismaClient();
 
-// Fungsi untuk Register (Mendaftar) ======================================================
+// ==================================================
+// Function untuk Register - (POST /auth/register)
+// ==================================================
 exports.register = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -36,7 +38,9 @@ exports.register = async (req, res) => {
     }
 };
 
-// Fungsi untuk Login (Masuk) =============================================================
+// ==================================================
+// Function untuk Login - (POST /auth/login)
+// ==================================================
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
