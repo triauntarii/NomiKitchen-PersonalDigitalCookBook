@@ -56,3 +56,114 @@ exports.getAllRecipes = async (req, res) => {
         res.status(500).json({ message: "Terjadi kesalahan server", error: error.message });
     }
 };
+
+// Lihat Detail Resep Berdasarkan ID (GET /recipes/:id)
+exports.getRecipeById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const recipe = await prisma.recipe.findFirst({
+            where: { id: parseInt(id), userId: req.user.id },
+            include: { photos: true, category: true }
+        });
+
+        if (!recipe) return res.status(404).json({ message: "Resep tidak ditemukan" });
+        res.json(recipe);
+    } catch (error) {
+        res.status(500).json({ message: "Terjadi kesalahan server", error: error.message });
+    }
+};
+
+// Update Informasi Resep (PUT /recipes/:id)
+exports.updateRecipe = async (req, res) => {
+    const { id } = req.params;
+    const { title, description, ingredients, instructions, categoryId } = req.body;
+
+    try {
+        // Cek kepemilikan resep
+        const existingRecipe = await prisma.recipe.findUnique({ where: { id: parseInt(id) } });
+        if (!existingRecipe || existingRecipe.userId !== req.user.id) {
+            return res.status(403).json({ message: "Anda tidak berhak mengubah resep ini" });
+        }
+
+        const updatedRecipe = await prisma.recipe.update({
+            where: { id: parseInt(id) },
+            data: {
+                title,
+                description,
+                ingredients,
+                instructions,
+                categoryId: categoryId ? parseInt(categoryId) : null,
+            }
+        });
+        
+        // (Opsional) Jika Anda ingin menambahkan logika update foto, bisa ditambahkan di sini nantinya
+
+        res.json({ message: "Resep berhasil diperbarui", recipe: updatedRecipe });
+    } catch (error) {
+        res.status(500).json({ message: "Terjadi kesalahan server", error: error.message });
+    }
+};
+
+// Hapus Resep (DELETE /recipes/:id)
+exports.deleteRecipe = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const existingRecipe = await prisma.recipe.findUnique({ where: { id: parseInt(id) } });
+        if (!existingRecipe || existingRecipe.userId !== req.user.id) {
+            return res.status(403).json({ message: "Anda tidak berhak menghapus resep ini" });
+        }
+
+        await prisma.recipe.delete({ where: { id: parseInt(id) } });
+        res.status(204).send(); // 204 No Content sesuai proposal Anda
+    } catch (error) {
+        res.status(500).json({ message: "Terjadi kesalahan server", error: error.message });
+    }
+};
+
+// Ubah Status Favorit (PATCH /recipes/:id/favorite)
+exports.toggleFavorite = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const existingRecipe = await prisma.recipe.findUnique({ where: { id: parseInt(id) } });
+        if (!existingRecipe || existingRecipe.userId !== req.user.id) {
+            return res.status(403).json({ message: "Akses ditolak" });
+        }
+
+        const updatedRecipe = await prisma.recipe.update({
+            where: { id: parseInt(id) },
+            data: { isFavorite: !existingRecipe.isFavorite } // Membalikkan nilai true/false
+        });
+
+        res.json({ message: "Status favorit diperbarui", isFavorite: updatedRecipe.isFavorite });
+    } catch (error) {
+        res.status(500).json({ message: "Terjadi kesalahan server", error: error.message });
+    }
+};
+
+// Cari Resep (GET /recipes/search?keyword=&category=)
+exports.searchRecipes = async (req, res) => {
+    const { keyword, category } = req.query;
+    const userId = req.user.id;
+
+    try {
+        const recipes = await prisma.recipe.findMany({
+            where: {
+                userId: userId,
+                // Mencari keyword di title ATAU description
+                OR: [
+                    { title: { contains: keyword || '' } },
+                    { description: { contains: keyword || '' } }
+                ],
+                // Jika category dikirim, filter berdasarkan nama kategori
+                ...(category && { category: { name: { equals: category } } })
+            },
+            include: { category: true, photos: true }
+        });
+
+        res.json(recipes);
+    } catch (error) {
+        res.status(500).json({ message: "Terjadi kesalahan server", error: error.message });
+    }
+};

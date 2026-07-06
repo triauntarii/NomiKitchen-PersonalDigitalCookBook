@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
 const recipeRoutes = require('./routes/recipeRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,6 +21,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/auth', authRoutes);
 app.use('/recipes', recipeRoutes);
+app.use('/categories', categoryRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: "Welcome to Nomi Kitchen API" });

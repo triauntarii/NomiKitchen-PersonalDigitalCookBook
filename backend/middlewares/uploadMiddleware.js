@@ -15,10 +15,13 @@ const storage = multer.diskStorage({
 
 // Filter untuk hanya menerima file gambar
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
+    // Daftar format MIME yang diizinkan
+    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+    if (allowedMimeTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new Error('Bukan file gambar! Silakan unggah gambar.'), false);
+        cb(new Error('Format file tidak didukung! Hanya izinkan JPG, PNG, dan WEBP.'), false);
     }
 };
 
