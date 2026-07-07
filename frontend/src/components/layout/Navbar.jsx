@@ -82,7 +82,7 @@ export default function Navbar() {
             <div className="flex">
               {/* Logo Utama Aplikasi */}
               <Link to="/dashboard" className="flex shrink-0 items-center gap-2">
-                <img src={nomiIcon} alt="Nomi Kitchen Logo" className="h-10 w-10 rounded-xl object-cover shadow-md" />
+                <img src={nomiIcon} alt="Nomi Kitchen Logo" className="h-10 w-10 object-contain !rounded-none !border-0 !bg-transparent !shadow-none" />
                 <div className="flex flex-col">
                   <span className="font-heading text-xl font-bold tracking-tight text-nomi-brown">
                     Nomi Kitchen

@@ -33,7 +33,7 @@ export default function AuthLayout({
           <img
             src={nomiIcon}
             alt="Nomi Kitchen Logo"
-            className="h-16 w-16 rounded-2xl object-cover shadow-md border border-nomi-orange/10 bg-white"
+            className="h-16 w-16 object-contain !rounded-none !border-0 !bg-transparent !shadow-none"
           />
           <h1 className="text-2.5xl font-heading font-black text-nomi-brown mt-3 tracking-tight">
             Nomi Kitchen
@@ -74,7 +74,7 @@ export default function AuthLayout({
             <img
               src={nomiIcon}
               alt="Nomi Kitchen Logo"
-              className="h-10 w-10 rounded-xl object-cover shadow border border-nomi-orange/10 bg-white"
+              className="h-10 w-10 object-contain !rounded-none !border-0 !bg-transparent !shadow-none"
             />
             <div>
               <h1 className="text-xl font-heading font-black text-nomi-brown tracking-tight leading-none">

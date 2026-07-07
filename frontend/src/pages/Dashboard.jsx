@@ -133,9 +133,9 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8">
-      // ==================================================
-      // Header Selamat Datang (Welcome Hero Card)
-      // ==================================================
+      {/* ==================================================
+      Header Selamat Datang (Welcome Hero Card)
+      ================================================== */}
       <div className="rounded-3xl bg-linear-to-br from-nomi-orange/15 via-nomi-mustard/10 to-nomi-teal/5 p-6 md:p-10 border border-nomi-orange/10 relative overflow-hidden md:pr-48">
         <div className="absolute right-6 top-1/2 -translate-y-1/2 h-32 md:h-40 w-auto pointer-events-none hidden sm:block">
           <img src={nomiHappyImg} alt="Nomi Happy" className="h-full w-auto object-contain" />
@@ -155,11 +155,11 @@ export default function Dashboard() {
         </div>
       </div>
 
-      // ==================================================
-      // Bar Pencarian & Tombol Tambah Resep
-      // ==================================================
+      {/* ==================================================
+      Bar Pencarian & Tombol Tambah Resep
+      ================================================== */}
       <div className="flex items-center justify-between gap-3 w-full">
-        // Input Pencarian
+        {/* Input Pencarian */}
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-nomi-brown/40" />
           <Input
@@ -181,9 +181,6 @@ export default function Dashboard() {
         )}
       </div>
 
-      // ==================================================
-      // Slider Pilihan Kategori Masakan
-      // ==================================================
       <div className="space-y-3">
         <h3 className="text-xs uppercase tracking-wider font-extrabold text-nomi-brown/65">Mau masak apa hari ini?</h3>
         <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-none">
@@ -226,9 +223,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      // ==================================================
-      // Grid Daftar Resep Masakan
-      // ==================================================
       {loading ? (
         <div className="flex h-40 flex-col items-center justify-center gap-3">
           <Loader2 className="h-8 w-8 animate-spin text-nomi-orange" />
@@ -239,7 +233,7 @@ export default function Dashboard() {
           {displayedRecipes.map((recipe) => (
             <Card key={recipe.id} className="border-nomi-brown/10 bg-white/70 backdrop-blur shadow-sm rounded-2xl overflow-hidden hover:shadow-md transition-all group flex flex-col justify-between">
               <div>
-                // Recipe Card Image
+                {/* Recipe Card Image */}
                 <div className="aspect-4/3 w-full bg-nomi-orange/5 relative overflow-hidden flex items-center justify-center border-b border-nomi-brown/5">
                   {recipe.photos && recipe.photos.length > 0 ? (
                     <img
@@ -254,7 +248,7 @@ export default function Dashboard() {
                     </div>
                   )}
 
-                  // Inline Favorite Button
+                  {/* Inline Favorite Button */}
                   <button
                     onClick={(e) => {
                       e.preventDefault();
@@ -269,7 +263,7 @@ export default function Dashboard() {
                     <Heart className={`h-4 w-4 ${recipe.isFavorite ? "fill-current" : ""}`} />
                   </button>
 
-                  // Category Badge overlay
+                  {/* Category Badge overlay */}
                   {recipe.category && (
                     <div className="absolute bottom-3 left-3">
                       <Badge className="bg-nomi-teal hover:bg-nomi-teal text-white border-none py-0.5 px-2 rounded-lg text-[9px] uppercase font-bold tracking-wider">
@@ -291,7 +285,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              // Card Footer Actions
+              {/* Card Footer Actions */}
               <div className="px-4.5 pb-4.5 pt-0 flex justify-end">
                 <Link to={`/recipes/${recipe.id}`} className="w-full">
                   <Button

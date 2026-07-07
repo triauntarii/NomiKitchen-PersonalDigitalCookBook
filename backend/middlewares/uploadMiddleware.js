@@ -1,10 +1,17 @@
 const multer = require('multer');
+const fs = require('fs');
 const path = require('path');
+
+const uploadDir = path.join(__dirname, '..', 'uploads');
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // Konfigurasi penyimpanan multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // Simpan di folder 'uploads'
+        cb(null, uploadDir); // Simpan pasti ke backend/uploads
     },
     filename: (req, file, cb) => {
         // Format nama file: timestamp_namaAsli.ekstensi

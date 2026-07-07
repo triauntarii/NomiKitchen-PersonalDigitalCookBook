@@ -29,6 +29,14 @@ app.get('/', (req, res) => {
     res.json({ message: "Welcome to Nomi Kitchen API" });
 });
 
+// Middleware penanganan error global (untuk menangkap error upload file dll)
+app.use((err, req, res, next) => {
+    console.error("Error handler:", err.message);
+    res.status(err.status || 400).json({ 
+        message: err.message || "Terjadi kesalahan pada server" 
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
