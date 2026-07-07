@@ -1,0 +1,560 @@
+{
+  "info": {
+    "_postman_id": "de3bdbc3-734f-406b-aa61-416171da8cbe",
+    "name": "[Wadv1] UAS - Nomi Kitchen",
+    "description": "REST API untuk Personal Digital Cookbook Nomi Kitchen.  \nBase URL: [http://localhost:5000](http://localhost:5000)  \nAuth: Bearer JWT Token",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55363731",
+    "_collection_link": "https://go.postman.co/collection/55363731-de3bdbc3-734f-406b-aa61-416171da8cbe?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Tria Untari\",\r\n  \"email\": \"tria@email.com\",\r\n  \"password\": \"triiaa123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Simpan token JWT ke environment variable secara otomatis\r",
+                  "const jsonData = pm.response.json();\r",
+                  "\r",
+                  "if (jsonData.token) {\r",
+                  "    pm.environment.set(\"token\", jsonData.token);\r",
+                  "    console.log(\"✅ Token berhasil disimpan:\", jsonData.token);\r",
+                  "} else {\r",
+                  "    console.log(\"❎ Token tidak ditemukan dalam response.\");\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"tria@email.com\",\r\n  \"password\": \"triiaa123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Tria Untari Sasmito",
+                  "type": "text",
+                  "uuid": "b071cc24-e45e-49d4-8e52-e9511baf9a1d"
+                },
+                {
+                  "key": "email",
+                  "value": "tria@email.com",
+                  "type": "text",
+                  "uuid": "0d7fa4ea-399b-472c-b132-f3d5cf9fb83e"
+                },
+                {
+                  "key": "password",
+                  "value": "triiaa123new",
+                  "type": "text",
+                  "uuid": "93f346e8-6dca-4937-906a-176e45904747"
+                },
+                {
+                  "key": "profilePic",
+                  "type": "file",
+                  "uuid": "39c30afc-217e-41a8-93d4-c720a618af69",
+                  "value": null
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Category",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Makanan Khas Daerah\",\r\n  \"description\": \"Resep masakan tradisional dari berbagai daerah di Indonesia\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Recipe",
+      "item": [
+        {
+          "name": "Create Recipe",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "Nasi Goreng Spesial",
+                  "type": "text",
+                  "uuid": "c8307b73-4f87-4f65-bc93-0751e2795e20"
+                },
+                {
+                  "key": "description",
+                  "value": "Nasi goreng rumahan dengan cita rasa yang kaya, dimasak dengan bumbu rempah pilihan dan telur mata sapi di atasnya.",
+                  "type": "text",
+                  "uuid": "ac8c7390-4659-4b16-84b2-61629ecca31f"
+                },
+                {
+                  "key": "ingredients",
+                  "value": "[\"2 piring nasi putih dingin\",\"2 butir telur ayam\",\"3 siung bawang putih (cincang)\",\"4 siung bawang merah (iris tipis)\",\"2 sdm kecap manis\",\"1 sdm saus tiram\",\"1 sdt garam\",\"1/2 sdt merica bubuk\",\"2 sdm minyak goreng\",\"Daun bawang secukupnya\"]",
+                  "type": "text",
+                  "uuid": "df51e745-d8f9-4afb-ad56-12c4622f979a"
+                },
+                {
+                  "key": "instructions",
+                  "value": "[\"Panaskan minyak goreng di wajan dengan api sedang.\",\"Tumis bawang merah dan bawang putih hingga harum dan kecoklatan.\",\"Masukkan telur, orak-arik hingga setengah matang.\",\"Masukkan nasi putih, aduk rata dengan bumbu.\",\"Tambahkan kecap manis, saus tiram, garam, dan merica. Aduk rata.\",\"Masak selama 3-5 menit sambil terus diaduk hingga nasi tercampur sempurna.\",\"Angkat dan sajikan dengan taburan daun bawang dan kerupuk.\"]",
+                  "type": "text",
+                  "uuid": "1ce4a84e-6144-4f05-877e-cf06a6bde81b"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "1",
+                  "type": "text",
+                  "uuid": "b32061aa-478b-484e-a22a-36c8e947a49c"
+                },
+                {
+                  "key": "photos",
+                  "type": "file",
+                  "uuid": "2e8cb6ed-d3aa-402a-8819-b6378a3a7268",
+                  "src": "/C:/Users/Tria Untari Sasmito/Downloads/nasiGoreng.jpeg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/recipes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "recipes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All My Recipes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/recipes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "recipes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Recipes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/recipes/search?keyword=nasi&category=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "recipes",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "nasi",
+                  "description": "Kata kunci pencarian (opsional)",
+                  "type": "text"
+                },
+                {
+                  "key": "category",
+                  "value": "1",
+                  "description": "ID kategori untuk filter (opsional)",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Recipe by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/recipes/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "recipes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Recipe",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "Nasi Goreng Spesial - Edisi Revisi",
+                  "type": "text",
+                  "uuid": "cdca527e-beb3-4650-beed-c46a4d148b55"
+                },
+                {
+                  "key": "description",
+                  "value": "Versi yang diperbarui dengan tambahan udang dan pete untuk cita rasa yang lebih kuat.",
+                  "type": "text",
+                  "uuid": "09b6ba31-f294-4bda-9d50-4b55f9004a72"
+                },
+                {
+                  "key": "ingredients",
+                  "value": "[\"2 piring nasi putih dingin\",\"2 butir telur ayam\",\"100 gram udang kupas\",\"5 buah pete (belah dua)\",\"3 siung bawang putih (cincang)\",\"4 siung bawang merah (iris tipis)\",\"2 sdm kecap manis\",\"1 sdm saus tiram\",\"1 sdt garam\",\"1/2 sdt merica bubuk\",\"2 sdm minyak goreng\"]",
+                  "type": "text",
+                  "uuid": "c38550e1-f252-4563-8e35-0a1f34c765f5"
+                },
+                {
+                  "key": "instructions",
+                  "value": "[\"Panaskan minyak, tumis bawang merah dan putih hingga harum.\",\"Masukkan udang dan pete, masak hingga udang berubah warna.\",\"Tambahkan telur, orak-arik sebentar.\",\"Masukkan nasi, kecap manis, saus tiram, garam, dan merica.\",\"Aduk rata selama 5 menit hingga semua bahan tercampur.\",\"Sajikan hangat dengan pelengkap sesuai selera.\"]",
+                  "type": "text",
+                  "uuid": "4f8100a0-7091-4444-82aa-fef87861e013"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "1",
+                  "type": "text",
+                  "uuid": "677f589c-5ef9-4566-8f68-1f27d5b63a36"
+                },
+                {
+                  "key": "photos",
+                  "type": "file",
+                  "uuid": "b16b8711-b918-418d-914c-4366313341e1",
+                  "value": null
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/recipes/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "recipes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Recipe",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/recipes/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "recipes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Toogle Favorite Recipe",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/recipes/:id/favorite",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "recipes",
+                ":id",
+                "favorite"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
